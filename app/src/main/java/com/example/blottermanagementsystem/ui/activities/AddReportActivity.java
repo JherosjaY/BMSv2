@@ -722,13 +722,12 @@ public class AddReportActivity extends BaseActivity {
                 return;
         }
         
-        // Find current selection
-        String currentType = actvIncidentType.getText().toString();
-        int currentIndex = -1;
-        for (int i = 0; i < types.length; i++) {
-            if (types[i].equals(currentType)) {
-                currentIndex = i;
-                break;
+        // Parse current selections (comma-separated)
+        String currentTypes = actvIncidentType.getText().toString();
+        List<String> selectedTypes = new ArrayList<>();
+        if (!currentTypes.isEmpty()) {
+            for (String type : currentTypes.split(",")) {
+                selectedTypes.add(type.trim());
             }
         }
         
@@ -736,60 +735,84 @@ public class AddReportActivity extends BaseActivity {
         android.view.View customView = android.view.LayoutInflater.from(this).inflate(R.layout.dialog_incident_types, null);
         android.widget.LinearLayout container = customView.findViewById(R.id.incidentTypesContainer);
         
-        int genericIcon = R.drawable.ic_incident_generic;
+        // Add info text
+        android.widget.TextView tvInfo = new android.widget.TextView(this);
+        tvInfo.setText("Select up to 2 incident types");
+        tvInfo.setTextSize(12);
+        tvInfo.setTextColor(android.graphics.Color.GRAY);
+        tvInfo.setPadding(16, 16, 16, 8);
+        container.addView(tvInfo);
         
-        // Add radio buttons to container
-        android.widget.RadioGroup radioGroup = new android.widget.RadioGroup(this);
-        radioGroup.setLayoutParams(new android.widget.LinearLayout.LayoutParams(
+        // Add checkboxes to container
+        android.widget.LinearLayout checkboxGroup = new android.widget.LinearLayout(this);
+        checkboxGroup.setLayoutParams(new android.widget.LinearLayout.LayoutParams(
             android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
             android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
         ));
-        radioGroup.setOrientation(android.widget.RadioGroup.VERTICAL);
+        checkboxGroup.setOrientation(android.widget.LinearLayout.VERTICAL);
+        
+        int electricBlueColor = androidx.core.content.ContextCompat.getColor(this, R.color.electric_blue);
+        android.content.res.ColorStateList colorStateList = android.content.res.ColorStateList.valueOf(electricBlueColor);
         
         for (int i = 0; i < types.length; i++) {
-            android.widget.RadioButton radioButton = new android.widget.RadioButton(this);
-            radioButton.setText(types[i]);
-            radioButton.setTextSize(16);
-            radioButton.setTextColor(android.graphics.Color.WHITE);
-            radioButton.setPadding(32, 20, 16, 20);
+            android.widget.CheckBox checkBox = new android.widget.CheckBox(this);
+            checkBox.setText(types[i]);
+            checkBox.setTextSize(16);
+            checkBox.setTextColor(android.graphics.Color.WHITE);
+            checkBox.setPadding(32, 20, 16, 20);
             
-            // Apply electric blue color to RadioButton (consistent with app theme)
-            int electricBlueColor = androidx.core.content.ContextCompat.getColor(this, R.color.electric_blue);
-            android.content.res.ColorStateList colorStateList = android.content.res.ColorStateList.valueOf(electricBlueColor);
-            androidx.core.widget.CompoundButtonCompat.setButtonTintList(radioButton, colorStateList);
+            // Apply electric blue color to CheckBox
+            androidx.core.widget.CompoundButtonCompat.setButtonTintList(checkBox, colorStateList);
             
             android.widget.LinearLayout.LayoutParams params = new android.widget.LinearLayout.LayoutParams(
                 android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
                 android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
             );
             params.setMargins(0, 8, 0, 8);
-            radioButton.setLayoutParams(params);
+            checkBox.setLayoutParams(params);
             
-            if (i == currentIndex) {
-                radioButton.setChecked(true);
+            // Check if already selected
+            if (selectedTypes.contains(types[i])) {
+                checkBox.setChecked(true);
             }
             
-            radioGroup.addView(radioButton);
+            // Listener to enforce max 2 selections
+            final int index = i;
+            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    if (selectedTypes.size() >= 2) {
+                        checkBox.setChecked(false);
+                        Toast.makeText(this, "Maximum 2 incident types allowed", Toast.LENGTH_SHORT).show();
+                    } else {
+                        selectedTypes.add(types[index]);
+                    }
+                } else {
+                    selectedTypes.remove(types[index]);
+                }
+            });
+            
+            checkboxGroup.addView(checkBox);
         }
         
-        container.addView(radioGroup);
+        container.addView(checkboxGroup);
         
         // Modern dark dialog with border
         androidx.appcompat.app.AlertDialog dialog2 = new com.google.android.material.dialog.MaterialAlertDialogBuilder(this, com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog)
             .setTitle(categoryTitle)
             .setView(customView)
             .setPositiveButton("Select", (dialogInterface, which) -> {
-                int selectedId = radioGroup.getCheckedRadioButtonId();
-                if (selectedId != -1) {
-                    android.widget.RadioButton selectedRadio = customView.findViewById(selectedId);
-                    String selectedType = selectedRadio.getText().toString();
-                    actvIncidentType.setText(selectedType);
+                if (!selectedTypes.isEmpty()) {
+                    // Join selected types with comma
+                    String result = String.join(", ", selectedTypes);
+                    actvIncidentType.setText(result);
                     
                     // Clear accusation field - user will click to see dropdown
                     etAccusation.setText("");
                     
-                    android.util.Log.d("AddReportActivity", "✅ Cleared Accusation field - user can now click to see dropdown options");
+                    android.util.Log.d("AddReportActivity", "✅ Selected incident types: " + result);
                     dialogInterface.dismiss();
+                } else {
+                    Toast.makeText(this, "Please select at least one incident type", Toast.LENGTH_SHORT).show();
                 }
             })
             .setNegativeButton("Back", (dialogInterface, which) -> {
