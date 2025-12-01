@@ -122,16 +122,11 @@ public class OfficerDashboardActivity extends BaseActivity {
                     if (isAssignedToOfficer) {
                         total++;
                         recentCases.add(report);
-                        // Match the filtering logic in OfficerMyCasesActivity
-                        // Only count "Assigned" status for pending (not "pending")
-                        if ("assigned".equalsIgnoreCase(status)) {
-                            // "Assigned" status - not yet started investigation
+                        if ("pending".equals(status) || "assigned".equals(status)) {
                             pending++;
-                        } else if ("ongoing".equalsIgnoreCase(status) || "in progress".equalsIgnoreCase(status)) {
-                            // "Ongoing" or "In Progress" status - investigation started
+                        } else if ("ongoing".equals(status) || "in progress".equals(status)) {
                             active++;
-                        } else if ("resolved".equalsIgnoreCase(status) || "closed".equalsIgnoreCase(status)) {
-                            // "Resolved" or "Closed" status - case completed
+                        } else if ("resolved".equals(status) || "closed".equals(status)) {
                             resolved++;
                         }
                     }
@@ -221,66 +216,56 @@ public class OfficerDashboardActivity extends BaseActivity {
 
     private void setupStatisticsCardListeners() {
         try {
-            // Total Cases Card - Navigate to My Cases with "All" filter
             View cardTotalCases = findViewById(R.id.cardTotalCases);
             if (cardTotalCases != null) {
                 cardTotalCases.setOnClickListener(v -> {
                     try {
-                        Intent intent = new Intent(this, OfficerMyCasesActivity.class);
-                        intent.putExtra("SELECTED_FILTER", "All");
+                        Intent intent = new Intent(this, OfficerViewAssignedReportsActivity_New.class);
+                        intent.putExtra("SELECTED_CHIP", "ALL");
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     } catch (Exception e) {
-                        android.util.Log.e("OfficerDashboard", "Error opening My Cases", e);
-                        Toast.makeText(this, "Error opening My Cases", Toast.LENGTH_SHORT).show();
+                        android.util.Log.e("OfficerDashboard", "Error opening ViewAssignedReports", e);
                     }
                 });
             }
 
-            // Assigned Card - Navigate to My Cases with "Assigned" filter
             View cardPending = findViewById(R.id.cardPending);
             if (cardPending != null) {
                 cardPending.setOnClickListener(v -> {
                     try {
-                        Intent intent = new Intent(this, OfficerMyCasesActivity.class);
-                        intent.putExtra("SELECTED_FILTER", "Assigned");
+                        Intent intent = new Intent(this, OfficerViewAssignedReportsActivity_New.class);
+                        intent.putExtra("SELECTED_CHIP", "ASSIGNED");
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     } catch (Exception e) {
-                        android.util.Log.e("OfficerDashboard", "Error opening My Cases", e);
-                        Toast.makeText(this, "Error opening My Cases", Toast.LENGTH_SHORT).show();
+                        android.util.Log.e("OfficerDashboard", "Error opening ViewAssignedReports", e);
                     }
                 });
             }
 
-            // Active Card - Navigate to My Cases with "Ongoing" filter
             View cardActive = findViewById(R.id.cardActive);
             if (cardActive != null) {
                 cardActive.setOnClickListener(v -> {
                     try {
-                        Intent intent = new Intent(this, OfficerMyCasesActivity.class);
-                        intent.putExtra("SELECTED_FILTER", "Ongoing");
+                        Intent intent = new Intent(this, OfficerViewOngoingReportsActivity_New.class);
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     } catch (Exception e) {
-                        android.util.Log.e("OfficerDashboard", "Error opening My Cases", e);
-                        Toast.makeText(this, "Error opening My Cases", Toast.LENGTH_SHORT).show();
+                        android.util.Log.e("OfficerDashboard", "Error opening ViewOngoingReports", e);
                     }
                 });
             }
 
-            // Resolved Card - Navigate to My Cases with "Resolved" filter
             View cardResolved = findViewById(R.id.cardResolved);
             if (cardResolved != null) {
                 cardResolved.setOnClickListener(v -> {
                     try {
-                        Intent intent = new Intent(this, OfficerMyCasesActivity.class);
-                        intent.putExtra("SELECTED_FILTER", "Resolved");
+                        Intent intent = new Intent(this, OfficerViewResolvedReportsActivity_New.class);
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     } catch (Exception e) {
-                        android.util.Log.e("OfficerDashboard", "Error opening My Cases", e);
-                        Toast.makeText(this, "Error opening My Cases", Toast.LENGTH_SHORT).show();
+                        android.util.Log.e("OfficerDashboard", "Error opening ViewResolvedReports", e);
                     }
                 });
             }
