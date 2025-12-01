@@ -163,25 +163,25 @@ public class MainActivity extends BaseActivity {
             
             if (existingAdmin == null && oldAdmin == null) {
                 // Create built-in admin account with hashed password
-                String hashedPassword = hashPassword("BMS2025");
+                String hashedPassword = hashPassword("@BMSOFFICIAL2025");
                 User admin = new User("System", "Administrator", "official.bms.admin", hashedPassword, "Admin");
                 admin.setActive(true);
                 database.userDao().insertUser(admin);
-                android.util.Log.d("MainActivity", "✅ Default admin account created: official.bms.admin/BMS2025");
+                android.util.Log.d("MainActivity", "✅ Default admin account created: official.bms.admin/@BMSOFFICIAL2025");
             } else if (existingAdmin == null && oldAdmin != null) {
                 // Migrate old admin account to new username
-                String hashedPassword = hashPassword("BMS2025");
+                String hashedPassword = hashPassword("@BMSOFFICIAL2025");
                 oldAdmin.setUsername("official.bms.admin");
                 oldAdmin.setPassword(hashedPassword);
                 database.userDao().updateUser(oldAdmin);
-                android.util.Log.d("MainActivity", "✅ Admin account migrated to new username: official.bms.admin/BMS2025");
+                android.util.Log.d("MainActivity", "✅ Admin account migrated to new username: official.bms.admin/@BMSOFFICIAL2025");
             } else {
                 // Admin account exists with new username - update password if needed
-                if (!existingAdmin.getPassword().equals(hashPassword("BMS2025"))) {
-                    String hashedPassword = hashPassword("BMS2025");
+                if (!existingAdmin.getPassword().equals(hashPassword("@BMSOFFICIAL2025"))) {
+                    String hashedPassword = hashPassword("@BMSOFFICIAL2025");
                     existingAdmin.setPassword(hashedPassword);
                     database.userDao().updateUser(existingAdmin);
-                    android.util.Log.d("MainActivity", "✅ Admin password updated to: BMS2025");
+                    android.util.Log.d("MainActivity", "✅ Admin password updated to: @BMSOFFICIAL2025");
                 }
             }
         });
