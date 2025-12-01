@@ -221,56 +221,66 @@ public class OfficerDashboardActivity extends BaseActivity {
 
     private void setupStatisticsCardListeners() {
         try {
+            // Total Cases Card - Navigate to My Cases with "All" filter
             View cardTotalCases = findViewById(R.id.cardTotalCases);
             if (cardTotalCases != null) {
                 cardTotalCases.setOnClickListener(v -> {
                     try {
-                        Intent intent = new Intent(this, OfficerViewAssignedReportsActivity_New.class);
-                        intent.putExtra("SELECTED_CHIP", "ALL");
+                        Intent intent = new Intent(this, OfficerMyCasesActivity.class);
+                        intent.putExtra("SELECTED_FILTER", "All");
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     } catch (Exception e) {
-                        android.util.Log.e("OfficerDashboard", "Error opening ViewAssignedReports", e);
+                        android.util.Log.e("OfficerDashboard", "Error opening My Cases", e);
+                        Toast.makeText(this, "Error opening My Cases", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
 
+            // Assigned Card - Navigate to My Cases with "Assigned" filter
             View cardPending = findViewById(R.id.cardPending);
             if (cardPending != null) {
                 cardPending.setOnClickListener(v -> {
                     try {
-                        Intent intent = new Intent(this, OfficerViewAssignedReportsActivity_New.class);
-                        intent.putExtra("SELECTED_CHIP", "ASSIGNED");
+                        Intent intent = new Intent(this, OfficerMyCasesActivity.class);
+                        intent.putExtra("SELECTED_FILTER", "Assigned");
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     } catch (Exception e) {
-                        android.util.Log.e("OfficerDashboard", "Error opening ViewAssignedReports", e);
+                        android.util.Log.e("OfficerDashboard", "Error opening My Cases", e);
+                        Toast.makeText(this, "Error opening My Cases", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
 
+            // Active Card - Navigate to My Cases with "Ongoing" filter
             View cardActive = findViewById(R.id.cardActive);
             if (cardActive != null) {
                 cardActive.setOnClickListener(v -> {
                     try {
-                        Intent intent = new Intent(this, OfficerViewOngoingReportsActivity_New.class);
+                        Intent intent = new Intent(this, OfficerMyCasesActivity.class);
+                        intent.putExtra("SELECTED_FILTER", "Ongoing");
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     } catch (Exception e) {
-                        android.util.Log.e("OfficerDashboard", "Error opening ViewOngoingReports", e);
+                        android.util.Log.e("OfficerDashboard", "Error opening My Cases", e);
+                        Toast.makeText(this, "Error opening My Cases", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
 
+            // Resolved Card - Navigate to My Cases with "Resolved" filter
             View cardResolved = findViewById(R.id.cardResolved);
             if (cardResolved != null) {
                 cardResolved.setOnClickListener(v -> {
                     try {
-                        Intent intent = new Intent(this, OfficerViewResolvedReportsActivity_New.class);
+                        Intent intent = new Intent(this, OfficerMyCasesActivity.class);
+                        intent.putExtra("SELECTED_FILTER", "Resolved");
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     } catch (Exception e) {
-                        android.util.Log.e("OfficerDashboard", "Error opening ViewResolvedReports", e);
+                        android.util.Log.e("OfficerDashboard", "Error opening My Cases", e);
+                        Toast.makeText(this, "Error opening My Cases", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

@@ -52,8 +52,39 @@ public class OfficerMyCasesActivity extends BaseActivity {
         initViews();
         setupRecyclerView();
         setupListeners();
+        
+        // Check if a specific filter was requested from the dashboard
+        String selectedFilter = getIntent().getStringExtra("SELECTED_FILTER");
+        if (selectedFilter != null) {
+            selectFilterChip(selectedFilter);
+        }
+        
         loadMyCases();
         startPeriodicRefresh();
+    }
+    
+    private void selectFilterChip(String filterName) {
+        // Uncheck all chips first
+        if (chipAll != null) chipAll.setChecked(false);
+        if (chipPending != null) chipPending.setChecked(false);
+        if (chipOngoing != null) chipOngoing.setChecked(false);
+        if (chipResolved != null) chipResolved.setChecked(false);
+        
+        // Select the requested chip
+        switch (filterName) {
+            case "All":
+                if (chipAll != null) chipAll.setChecked(true);
+                break;
+            case "Assigned":
+                if (chipPending != null) chipPending.setChecked(true);
+                break;
+            case "Ongoing":
+                if (chipOngoing != null) chipOngoing.setChecked(true);
+                break;
+            case "Resolved":
+                if (chipResolved != null) chipResolved.setChecked(true);
+                break;
+        }
     }
     
     private void initViews() {
