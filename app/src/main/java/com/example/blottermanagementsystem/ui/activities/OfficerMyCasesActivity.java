@@ -29,7 +29,7 @@ public class OfficerMyCasesActivity extends BaseActivity {
     private ProgressBar progressBar;
     private TextView tvTotalCases;
     private androidx.cardview.widget.CardView emptyStateCard;
-    private SearchView searchView;
+    private androidx.appcompat.widget.AppCompatEditText searchView;
     private ChipGroup chipGroupFilter;
     private ImageButton btnBack;
     private Chip chipAll, chipPending, chipOngoing, chipResolved;
@@ -137,18 +137,17 @@ public class OfficerMyCasesActivity extends BaseActivity {
         
         // Search functionality
         if (searchView != null) {
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            searchView.addTextChangedListener(new android.text.TextWatcher() {
                 @Override
-                public boolean onQueryTextSubmit(String query) {
-                    filterCases(query);
-                    return true;
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    filterCases(s.toString());
                 }
                 
                 @Override
-                public boolean onQueryTextChange(String newText) {
-                    filterCases(newText);
-                    return true;
-                }
+                public void afterTextChanged(android.text.Editable s) {}
             });
         }
         
