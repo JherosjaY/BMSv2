@@ -127,6 +127,10 @@ public class OfficerMyCasesActivity extends BaseActivity {
             chipAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
                     android.util.Log.d("OfficerMyCases", "All chip selected");
+                    // Uncheck other chips
+                    if (chipPending != null) chipPending.setChecked(false);
+                    if (chipOngoing != null) chipOngoing.setChecked(false);
+                    if (chipResolved != null) chipResolved.setChecked(false);
                     applyFilter();
                     updateFilterCounts();
                 }
@@ -137,6 +141,10 @@ public class OfficerMyCasesActivity extends BaseActivity {
             chipPending.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
                     android.util.Log.d("OfficerMyCases", "Assigned chip selected");
+                    // Uncheck other chips
+                    if (chipAll != null) chipAll.setChecked(false);
+                    if (chipOngoing != null) chipOngoing.setChecked(false);
+                    if (chipResolved != null) chipResolved.setChecked(false);
                     applyFilter();
                     updateFilterCounts();
                 }
@@ -147,6 +155,10 @@ public class OfficerMyCasesActivity extends BaseActivity {
             chipOngoing.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
                     android.util.Log.d("OfficerMyCases", "Ongoing chip selected");
+                    // Uncheck other chips
+                    if (chipAll != null) chipAll.setChecked(false);
+                    if (chipPending != null) chipPending.setChecked(false);
+                    if (chipResolved != null) chipResolved.setChecked(false);
                     applyFilter();
                     updateFilterCounts();
                 }
@@ -157,6 +169,10 @@ public class OfficerMyCasesActivity extends BaseActivity {
             chipResolved.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
                     android.util.Log.d("OfficerMyCases", "Resolved chip selected");
+                    // Uncheck other chips
+                    if (chipAll != null) chipAll.setChecked(false);
+                    if (chipPending != null) chipPending.setChecked(false);
+                    if (chipOngoing != null) chipOngoing.setChecked(false);
                     applyFilter();
                     updateFilterCounts();
                 }
